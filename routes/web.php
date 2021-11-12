@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,18 @@
 |
 */
 
+use Laravel\Lumen\Routing\Router;
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
+});
+
+$router->get('/users', 'UserController@index');
+$router->get('/users/{id}', 'UserController@show');
+$router->post('/users/store', 'UserController@store');
+$router->put('/users/{id}', 'UserController@update');
+$router->delete('/users/{id}', 'UserController@destroy');
+
+$router->group(['middleware' => 'auth:api'], function () use ($router) {
+
 });
