@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
+
+    Route::post('post-like', [PostController::class, 'postLike']);
+    Route::post('post-unlike', [PostController::class, 'postUnlike']);
 });
 
 Route::fallback(function () {

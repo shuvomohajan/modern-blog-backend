@@ -17,9 +17,10 @@ class PostController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'title'   => ['required', 'string'],
-            'content' => ['required', 'string'],
-            'status'  => ['nullable', 'boolean']
+            'category_id' => ['required', 'string', 'exists:categories,id'],
+            'title'       => ['required', 'string'],
+            'content'     => ['required', 'string'],
+            'status'      => ['nullable', 'boolean']
         ]);
         auth()->user()->posts()->create($validated);
         return $this->apiResponse(201, 'Post created.');
@@ -33,9 +34,10 @@ class PostController extends Controller
     public function update(Request $request, Post $post): JsonResponse
     {
         $validated = $request->validate([
-            'title'   => ['required', 'string'],
-            'content' => ['required', 'string'],
-            'status'  => ['nullable', 'boolean']
+            'category_id' => ['required', 'string', 'exists:categories,id'],
+            'title'       => ['required', 'string'],
+            'content'     => ['required', 'string'],
+            'status'      => ['nullable', 'boolean']
         ]);
         $post->update($validated);
         return $this->apiResponse(201, 'Post updated.');
@@ -45,5 +47,23 @@ class PostController extends Controller
     {
         $post->delete();
         return $this->apiResponse(200, 'Post deleted.');
+    }
+
+    public function postLike(Request $request): JsonResponse
+    {
+        $request->validate([
+            'post_id' => ['required', 'string', 'exists:posts,id']
+        ]);
+        Post::find($request->input('post_id'))->increment('like');
+        return $this->apiResponse(201, 'Post liked.');
+    }
+
+    public function postUnlike(Request $request): JsonResponse
+    {
+        $request->validate([
+            'post_id' => ['required', 'string', 'exists:posts,id']
+        ]);
+        Post::find($request->input('post_id'))->decrement('like');
+        return $this->apiResponse(201, 'Post liked.');
     }
 }

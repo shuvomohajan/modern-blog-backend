@@ -12,6 +12,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
+        'category_id',
         'title',
         'slug',
         'content',
@@ -36,6 +37,11 @@ class Post extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     private function createSlug($title): string
