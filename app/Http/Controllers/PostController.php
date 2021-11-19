@@ -10,7 +10,7 @@ class PostController extends Controller
 {
     public function index(): JsonResponse
     {
-        $posts = Post::all();
+        $posts = Post::withCount('upVotes', 'downVotes')->paginate(10);
         return $this->apiResponse(200, 'Post list.', ['data' => $posts]);
     }
 
@@ -23,6 +23,7 @@ class PostController extends Controller
             'status'      => ['nullable', 'boolean']
         ]);
         auth()->user()->posts()->create($validated);
+
         return $this->apiResponse(201, 'Post created.');
     }
 
@@ -40,6 +41,7 @@ class PostController extends Controller
             'status'      => ['nullable', 'boolean']
         ]);
         $post->update($validated);
+
         return $this->apiResponse(201, 'Post updated.');
     }
 
@@ -47,23 +49,5 @@ class PostController extends Controller
     {
         $post->delete();
         return $this->apiResponse(200, 'Post deleted.');
-    }
-
-    public function postLike(Request $request): JsonResponse
-    {
-        $request->validate([
-            'post_id' => ['required', 'string', 'exists:posts,id']
-        ]);
-        Post::find($request->input('post_id'))->increment('like');
-        return $this->apiResponse(201, 'Post liked.');
-    }
-
-    public function postUnlike(Request $request): JsonResponse
-    {
-        $request->validate([
-            'post_id' => ['required', 'string', 'exists:posts,id']
-        ]);
-        Post::find($request->input('post_id'))->decrement('like');
-        return $this->apiResponse(201, 'Post liked.');
     }
 }

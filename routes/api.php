@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -20,8 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('posts', PostController::class);
     Route::apiResource('comments', CommentController::class);
 
-    Route::post('post-like', [PostController::class, 'postLike']);
-    Route::post('post-unlike', [PostController::class, 'postUnlike']);
+    Route::post('vote', VoteController::class);
 });
 
 Route::fallback(function () {

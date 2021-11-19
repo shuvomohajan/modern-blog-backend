@@ -10,7 +10,8 @@ class UserController extends Controller
 {
     public function index(): JsonResponse
     {
-        return response()->json(User::paginate(10));
+        $users = User::paginate(10);
+        return $this->apiResponse(200, 'Users list.', ['data' => $users]);
     }
 
     public function store(Request $request): JsonResponse
@@ -24,12 +25,12 @@ class UserController extends Controller
         $validated['password'] = \Hash::make($validated['password']);
         User::create($validated);
 
-        return response()->json(['message' => 'user created.'], 201);
+        return $this->apiResponse(201, 'User created.');
     }
 
     public function show(User $user): JsonResponse
     {
-        return response()->json($user);
+        return $this->apiResponse(201, 'User show.', ['data' => $user]);
     }
 
     public function update(Request $request, User $user): JsonResponse
@@ -46,12 +47,12 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return response()->json(['message' => 'user updated.'], 201);
+        return $this->apiResponse(201, 'User updated.');
     }
 
     public function destroy(User $user): JsonResponse
     {
         $user->delete();
-        return response()->json(['message' => 'user deleted.']);
+        return $this->apiResponse(201, 'User deleted.');
     }
 }
