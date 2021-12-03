@@ -60,6 +60,11 @@ class Post extends Model
         return $this->hasMany(Vote::class)->whereVote(Vote::DOWN_VOTE);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     private function createSlug($title): string
     {
         $slug = Str::slug($title);

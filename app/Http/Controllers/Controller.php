@@ -12,6 +12,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public $itemsPerPage = 10;
+
     public function apiResponse(int $statusCode, string $statusMessage, $data = []): JsonResponse
     {
         $data['message'] = $statusMessage;

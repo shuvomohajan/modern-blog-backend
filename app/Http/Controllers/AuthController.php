@@ -37,7 +37,7 @@ class AuthController extends Controller
         }
         $token = $user->createToken($request->input('email'))->plainTextToken;
 
-        return $this->apiResponse(200, 'Login Successful.', ['token' => $token,]);
+        return $this->apiResponse(200, 'Login Successful.', ['token' => $token, 'user' => $user]);
     }
 
     public function logout(Request $request): JsonResponse

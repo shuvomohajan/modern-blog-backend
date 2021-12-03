@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoteController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('comments', CommentController::class);
 
     Route::post('vote', VoteController::class);
+    Route::get('profile', [ProfileController::class, 'profile']);
+    Route::get('profile/posts', [ProfileController::class, 'profilePosts']);
 });
 
 Route::fallback(function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,8 +11,8 @@ class PostController extends Controller
 {
     public function index(): JsonResponse
     {
-        $posts = Post::withCount('upVotes', 'downVotes')->paginate(10);
-        return $this->apiResponse(200, 'Post list.', ['data' => $posts]);
+        $posts = Post::withCount('upVotes', 'downVotes')->latest()->paginate($this->itemsPerPage);
+        return $this->apiResponseResourceCollection(200, 'Post list.', PostResource::collection($posts));
     }
 
     public function store(Request $request): JsonResponse
@@ -29,7 +30,8 @@ class PostController extends Controller
 
     public function show(Post $post): JsonResponse
     {
-        return $this->apiResponse(200, 'Post show.', ['data' => $post]);
+        $post->loadCount('upVotes', 'downVotes')->load(['user', 'comments.user']);
+        return $this->apiResponseResourceCollection(200, 'Post show.', PostResource::make($post));
     }
 
     public function update(Request $request, Post $post): JsonResponse
